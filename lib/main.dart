@@ -20,6 +20,8 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   int hungerLevel = 50;
   String moodLevel = "Neutral";
   String selectedActivity = "Play";
+  double energyLevel = 0.5;
+
 
   // Timer to update the pet's hunger and happiness levels
   Timer? timer;
@@ -48,6 +50,8 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
       _updateHunger();
       _updateMood();
       _checkWinCondition();
+      _updateEnergy();
+
     });
   }
 
@@ -56,7 +60,9 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
     setState(() {
       hungerLevel = (hungerLevel - 10).clamp(0, 100);
       _updateHappiness();
+      _updateMood();
       _checkWinCondition();
+      _updateEnergy();
     });
   }
 
@@ -145,7 +151,19 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   }
 
   void _onChanged(String value) {
-    setState(() => petName = value);
+        setState(() => petName = '${value}');
+  }
+
+  void _updateEnergy() {
+    if (happinessLevel < 30 && hungerLevel < 30) {
+      energyLevel = 0.2;
+    } else if (happinessLevel < 50 && hungerLevel < 50) {
+      energyLevel = 0.3;
+    } else if (happinessLevel < 70 && hungerLevel < 70) {
+    energyLevel = 0.6;
+    } else {
+      energyLevel = 0.9;
+    }
   }
 
   @override
@@ -154,11 +172,8 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
       appBar: AppBar(
         title: Text('Digital Pet'),
       ),
-      backgroundColor: happinessLevel < 30
-          ? Colors.red
-          : happinessLevel < 70
-              ? Colors.yellow
-              : Colors.green,
+      backgroundColor: happinessLevel < 30 ? Colors.red: happinessLevel < 70 ? Colors.yellow: Colors.green, 
+
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -177,6 +192,11 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
               'Hunger Level: $hungerLevel',
               style: TextStyle(fontSize: 20.0),
             ),
+            SizedBox(height: 16.0),
+            Text(
+              'Mood: $moodLevel',
+              style: TextStyle(fontSize: 20.0),
+            ),
             SizedBox(height: 32.0),
             DropdownButton<String>(
               value: selectedActivity,
@@ -192,6 +212,12 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
                   child: Text(value),
                 );
               }).toList(),
+                          LinearProgressIndicator(
+              backgroundColor: Colors.grey,
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue,),
+              value: energyLevel,
+            ),
+
             ),
             SizedBox(height: 16.0),
             ElevatedButton(
@@ -202,6 +228,10 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
             TextField(
               keyboardType: TextInputType.text,
               onChanged: _onChanged,
+            ),
+            TextField(
+                keyboardType: TextInputType.text,
+                onChanged: _onChanged,
             ),
           ],
         ),
