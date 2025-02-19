@@ -21,6 +21,10 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
 
   // Timer to update the pet's hunger and happiness levels
   Timer? timer;
+  Timer? winTimer;
+  bool isWinning = false;
+  int winDuration = 160; // 3 minutes in seconds
+
   @override
   void initState() {
     super.initState();
@@ -31,6 +35,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   @override
   void dispose() {
     timer?.cancel();
+    winTimer?.cancel();
     super.dispose();
   }
 
@@ -47,6 +52,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
     setState(() {
       hungerLevel = (hungerLevel - 10).clamp(0, 100);
       _updateHappiness();
+      _checkWinCondition();
     });
   }
 
@@ -65,6 +71,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
     if (hungerLevel >= 100) {
       hungerLevel = 100;
       happinessLevel = (happinessLevel - 20).clamp(0, 100);
+      _checkWinCondition();
     }
   }
 
@@ -72,7 +79,46 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   void hungerUpdater(_DigitalPetAppState state) {
     setState(() {
       hungerLevel = (hungerLevel + 20).clamp(0, 100);
+      happinessLevel = (happinessLevel - 10).clamp(0, 100);
+      _checkWinCondition();
     });
+  }
+
+  // Check if the win condition is met
+  void _checkWinCondition() {
+    if (happinessLevel > 80) {
+      if (!isWinning) {
+        isWinning = true;
+        winTimer = Timer(Duration(seconds: winDuration), _winGame);
+      }
+    } else {
+      isWinning = false;
+      winTimer?.cancel();
+    }
+  }
+
+// function to display a dialog when the win condition is met
+  void _winGame() {
+    if (isWinning) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("You Win!"),
+            content:
+                Text("Congratulations! Your pet has been happy for 3 minutes!"),
+            actions: <Widget>[
+              TextButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   @override
