@@ -19,6 +19,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   int happinessLevel = 50;
   int hungerLevel = 50;
   String moodLevel = "Neutral";
+  double energyLevel = 0.5;
 
 
   // Timer to update the pet's hunger and happiness levels
@@ -47,6 +48,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
       happinessLevel = (happinessLevel + 10).clamp(0, 100);
       _updateHunger();
       _updateMood();
+      _updateEnergy();
     });
   }
 
@@ -57,6 +59,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
       _updateHappiness();
       _updateMood();
       _checkWinCondition();
+      _updateEnergy();
     });
   }
 
@@ -139,6 +142,18 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
     setState(() => petName = '${value}');
   }
 
+  void _updateEnergy() {
+    if (happinessLevel < 30 && hungerLevel < 30) {
+      energyLevel = 0.2;
+    } else if (happinessLevel < 50 && hungerLevel < 50) {
+      energyLevel = 0.3;
+    } else if (happinessLevel < 70 && hungerLevel < 70) {
+    energyLevel = 0.6;
+    } else {
+      energyLevel = 0.9;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -170,6 +185,11 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
               style: TextStyle(fontSize: 20.0),
             ),
             SizedBox(height: 32.0),
+            LinearProgressIndicator(
+              backgroundColor: Colors.grey,
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue,),
+              value: energyLevel,
+            ),
             ElevatedButton(
               onPressed: _playWithPet,
               child: Text('Play with Your Pet'),
