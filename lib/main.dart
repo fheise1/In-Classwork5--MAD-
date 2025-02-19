@@ -17,6 +17,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   int hungerLevel = 50;
   String moodLevel = "Neutral";
 
+
   // Function to increase happiness and update hunger when playing with the pet
   void _playWithPet() {
     setState(() {
@@ -63,6 +64,14 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
     }
   }
 
+  void _onChanged(String value) {
+    setState(() => petName = '${value}');
+  }
+
+  void _onSubmit(String value) {
+    setState(() => petName = '${value}');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,6 +112,11 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
               onPressed: _feedPet,
               child: Text('Feed Your Pet'),
             ),
+            TextField(
+                keyboardType: TextInputType.text,
+                onChanged: _onChanged,
+                onSubmitted: _onSubmit,
+          ),
           ],
         ),
       ),
