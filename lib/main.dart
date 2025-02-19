@@ -18,6 +18,8 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   String petName = "Your Pet";
   int happinessLevel = 50;
   int hungerLevel = 50;
+  String moodLevel = "Neutral";
+
 
   // Timer to update the pet's hunger and happiness levels
   Timer? timer;
@@ -44,6 +46,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
     setState(() {
       happinessLevel = (happinessLevel + 10).clamp(0, 100);
       _updateHunger();
+      _updateMood();
     });
   }
 
@@ -52,6 +55,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
     setState(() {
       hungerLevel = (hungerLevel - 10).clamp(0, 100);
       _updateHappiness();
+      _updateMood();
       _checkWinCondition();
     });
   }
@@ -121,12 +125,27 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
     }
   }
 
+  void _updateMood() {
+    if (happinessLevel < 30) {
+      moodLevel = "Unhappy";
+    } else if (happinessLevel < 70) {
+      moodLevel = "Neutral";
+    } else {
+      moodLevel = "Happy";
+    }
+  }
+
+  void _onChanged(String value) {
+    setState(() => petName = '${value}');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Digital Pet'),
       ),
+      backgroundColor: happinessLevel < 30 ? Colors.red: happinessLevel < 70 ? Colors.yellow: Colors.green, 
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -145,6 +164,11 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
               'Hunger Level: $hungerLevel',
               style: TextStyle(fontSize: 20.0),
             ),
+            SizedBox(height: 16.0),
+            Text(
+              'Mood: $moodLevel',
+              style: TextStyle(fontSize: 20.0),
+            ),
             SizedBox(height: 32.0),
             ElevatedButton(
               onPressed: _playWithPet,
@@ -154,6 +178,10 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
             ElevatedButton(
               onPressed: _feedPet,
               child: Text('Feed Your Pet'),
+            ),
+            TextField(
+                keyboardType: TextInputType.text,
+                onChanged: _onChanged,
             ),
           ],
         ),
