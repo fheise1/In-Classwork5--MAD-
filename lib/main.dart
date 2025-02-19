@@ -1,4 +1,4 @@
-//Isaac Lara
+//Isaac Lara and Flynn Heise
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -50,6 +50,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
       _updateMood();
       _checkWinCondition();
       _updateEnergy();
+
     });
   }
 
@@ -149,7 +150,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   }
 
   void _onChanged(String value) {
-    setState(() => petName = '${value}');
+        setState(() => petName = '${value}');
   }
 
   void _updateEnergy() {
@@ -170,11 +171,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
       appBar: AppBar(
         title: Text('Digital Pet'),
       ),
-      backgroundColor: happinessLevel < 30
-          ? Colors.red
-          : happinessLevel < 70
-              ? Colors.yellow
-              : Colors.green,
+      backgroundColor: happinessLevel < 30 ? Colors.red: happinessLevel < 70 ? Colors.yellow: Colors.green, 
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
