@@ -22,7 +22,6 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   String selectedActivity = "Play";
   double energyLevel = 0.5;
 
-
   // Timer to update the pet's hunger and happiness levels
   Timer? timer;
   Timer? winTimer;
@@ -160,7 +159,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
     } else if (happinessLevel < 50 && hungerLevel < 50) {
       energyLevel = 0.3;
     } else if (happinessLevel < 70 && hungerLevel < 70) {
-    energyLevel = 0.6;
+      energyLevel = 0.6;
     } else {
       energyLevel = 0.9;
     }
@@ -173,7 +172,6 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
         title: Text('Digital Pet'),
       ),
       backgroundColor: happinessLevel < 30 ? Colors.red: happinessLevel < 70 ? Colors.yellow: Colors.green, 
-
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -216,7 +214,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
             SizedBox(height: 16.0),
             LinearProgressIndicator(
               backgroundColor: Colors.grey,
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue,),
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
               value: energyLevel,
             ),
             SizedBox(height: 16.0),
@@ -230,8 +228,8 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
               onChanged: _onChanged,
             ),
             TextField(
-                keyboardType: TextInputType.text,
-                onChanged: _onChanged,
+              keyboardType: TextInputType.text,
+              onChanged: _onChanged,
             ),
           ],
         ),
