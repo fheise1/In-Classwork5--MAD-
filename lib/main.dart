@@ -1,4 +1,4 @@
-//Isaac Lara
+//Isaac Lara and Flynn Heise
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -19,6 +19,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   int happinessLevel = 50;
   int hungerLevel = 50;
   String moodLevel = "Neutral";
+  String selectedActivity = "Play";
   double energyLevel = 0.5;
 
 
@@ -26,7 +27,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   Timer? timer;
   Timer? winTimer;
   bool isWinning = false;
-  int winDuration = 160; // 3 minutes in seconds
+  int winDuration = 180; // 3 minutes in seconds
 
   @override
   void initState() {
@@ -48,7 +49,9 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
       happinessLevel = (happinessLevel + 10).clamp(0, 100);
       _updateHunger();
       _updateMood();
+      _checkWinCondition();
       _updateEnergy();
+
     });
   }
 
@@ -61,6 +64,15 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
       _checkWinCondition();
       _updateEnergy();
     });
+  }
+
+  // Function to perform the selected activity
+  void _performActivity() {
+    if (selectedActivity == "Play") {
+      _playWithPet();
+    } else if (selectedActivity == "Feed") {
+      _feedPet();
+    }
   }
 
   // Update happiness based on hunger level
@@ -104,7 +116,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
     }
   }
 
-// function to display a dialog when the win condition is met
+  // Function to handle winning the game
   void _winGame() {
     if (isWinning) {
       showDialog(
@@ -139,7 +151,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   }
 
   void _onChanged(String value) {
-    setState(() => petName = '${value}');
+        setState(() => petName = '${value}');
   }
 
   void _updateEnergy() {
@@ -161,6 +173,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
         title: Text('Digital Pet'),
       ),
       backgroundColor: happinessLevel < 30 ? Colors.red: happinessLevel < 70 ? Colors.yellow: Colors.green, 
+
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -185,19 +198,36 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
               style: TextStyle(fontSize: 20.0),
             ),
             SizedBox(height: 32.0),
+            DropdownButton<String>(
+              value: selectedActivity,
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedActivity = newValue!;
+                });
+              },
+              items: <String>['Play', 'Feed']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+            SizedBox(height: 16.0),
             LinearProgressIndicator(
               backgroundColor: Colors.grey,
               valueColor: AlwaysStoppedAnimation<Color>(Colors.blue,),
               value: energyLevel,
             ),
-            ElevatedButton(
-              onPressed: _playWithPet,
-              child: Text('Play with Your Pet'),
-            ),
             SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed: _feedPet,
-              child: Text('Feed Your Pet'),
+              onPressed: _performActivity,
+              child: Text('Perform Activity'),
+            ),
+            SizedBox(height: 16.0),
+            TextField(
+              keyboardType: TextInputType.text,
+              onChanged: _onChanged,
             ),
             TextField(
                 keyboardType: TextInputType.text,
