@@ -56,6 +56,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
       appBar: AppBar(
         title: Text('Digital Pet'),
       ),
+      backgroundColor: happinessLevel < 30 ? Colors.red: happinessLevel < 70 ? Colors.yellow: Colors.green, 
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
