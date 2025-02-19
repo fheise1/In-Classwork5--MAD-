@@ -25,7 +25,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   void initState() {
     super.initState();
     timer =
-        Timer.periodic(Duration(seconds: 5), (Timer t) => hungerUpdater(this));
+        Timer.periodic(Duration(seconds: 30), (Timer t) => hungerUpdater(this));
   }
 
   @override
@@ -71,7 +71,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   // function to update the pet's hunger and happiness levels every second
   void hungerUpdater(_DigitalPetAppState state) {
     setState(() {
-      hungerLevel = (hungerLevel + 5).clamp(0, 100);
+      hungerLevel = (hungerLevel + 20).clamp(0, 100);
     });
   }
 
