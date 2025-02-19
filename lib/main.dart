@@ -68,10 +68,6 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
     setState(() => petName = '${value}');
   }
 
-  void _onSubmit(String value) {
-    setState(() => petName = '${value}');
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,8 +111,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
             TextField(
                 keyboardType: TextInputType.text,
                 onChanged: _onChanged,
-                onSubmitted: _onSubmit,
-          ),
+            ),
           ],
         ),
       ),
